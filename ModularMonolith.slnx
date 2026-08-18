@@ -5,11 +5,9 @@
   </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Auth/">
-    <Project Path="src/Modules/Auth/ModularMonolith.Modules.Auth.Contracts/ModularMonolith.Modules.Auth.Contracts.csproj" />
     <Project Path="src/Modules/Auth/ModularMonolith.Modules.Auth/ModularMonolith.Modules.Auth.csproj" />
   </Folder>
   <Folder Name="/src/Modules/Core/">
-    <Project Path="src/Modules/Core/ModularMonolith.Modules.Core.Contracts/ModularMonolith.Modules.Core.Contracts.csproj" />
     <Project Path="src/Modules/Core/ModularMonolith.Modules.Core/ModularMonolith.Modules.Core.csproj" />
   </Folder>
   <Folder Name="/src/Shared/">

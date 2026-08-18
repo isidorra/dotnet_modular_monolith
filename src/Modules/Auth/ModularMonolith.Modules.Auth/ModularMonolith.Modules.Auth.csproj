@@ -5,7 +5,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../ModularMonolith.Modules.Auth.Contracts/ModularMonolith.Modules.Auth.Contracts.csproj" />
     <ProjectReference Include="../../../Shared/ModularMonolith.Shared.Infrastructure/ModularMonolith.Shared.Infrastructure.csproj" />
   </ItemGroup>
 
