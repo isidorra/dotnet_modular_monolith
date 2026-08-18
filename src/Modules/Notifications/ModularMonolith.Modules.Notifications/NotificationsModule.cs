@@ -9,10 +9,12 @@ namespace ModularMonolith.Modules.Notifications;
 
 public sealed class NotificationsModule : IModule
 {
+    public const string SchemaPrefix = "notifications";
+
     public string Name => "Notifications";
 
     public void AddModule(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddModuleDbContext<NotificationsDbContext>(configuration, "notifications");
+        services.AddModuleDbContext<NotificationsDbContext>(configuration, SchemaPrefix);
     }
 }

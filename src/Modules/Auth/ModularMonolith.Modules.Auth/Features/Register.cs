@@ -12,7 +12,12 @@ using ModularMonolith.Shared.Infrastructure.Provisioning;
 
 namespace ModularMonolith.Modules.Auth.Features;
 
-public sealed record RegisterCommand(string TenantName, string Email, string Password);
+public sealed record RegisterCommand(
+    string TenantName,
+    string Email,
+    string Password,
+    string FirstName,
+    string LastName);
 
 public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
@@ -44,6 +49,14 @@ public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand
             .Matches("[a-z]").WithMessage("'{PropertyName}' must contain a lowercase letter")
             .Matches("[0-9]").WithMessage("'{PropertyName}' must contain a digit")
             .Matches("[^a-zA-Z0-9]").WithMessage("'{PropertyName}' must contain a non-alphanumeric character");
+
+        RuleFor(x => x.FirstName)
+            .NotEmpty()
+            .MaximumLength(100);
+
+        RuleFor(x => x.LastName)
+            .NotEmpty()
+            .MaximumLength(100);
     }
 }
 
@@ -52,6 +65,7 @@ public static class RegisterHandler
     public static async Task<AuthTokenResponse> Handle(
         RegisterCommand command,
         ITenantProvisioner provisioner,
+        IEnumerable<ITenantProvisioningParticipant> participants,
         IJwtTokenIssuer tokenIssuer,
         TimeProvider timeProvider,
         CancellationToken cancellationToken)
@@ -99,6 +113,20 @@ public static class RegisterHandler
         });
 
         await catalog.SaveChangesAsync(cancellationToken);
+
+        var registration = new TenantRegistration(
+            tenantId,
+            user.Id,
+            user.Email,
+            command.FirstName,
+            command.LastName,
+            now);
+
+        foreach (var participant in participants)
+        {
+            await participant.OnTenantProvisionedAsync(session, registration, cancellationToken);
+        }
+
         await session.CommitAsync(cancellationToken);
 
         return new AuthTokenResponse(tokenIssuer.Issue(user.Id, tenantId, user.Email));
