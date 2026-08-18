@@ -16,7 +16,6 @@
 
     <ProjectReference Include="../../Modules/Auth/ModularMonolith.Modules.Auth/ModularMonolith.Modules.Auth.csproj" />
     <ProjectReference Include="../../Modules/Core/ModularMonolith.Modules.Core/ModularMonolith.Modules.Core.csproj" />
-    <ProjectReference Include="../../Modules/Notifications/ModularMonolith.Modules.Notifications/ModularMonolith.Modules.Notifications.csproj" />
   </ItemGroup>
 
 </Project>

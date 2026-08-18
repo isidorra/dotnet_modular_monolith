@@ -2,7 +2,6 @@ using DotNetEnv;
 using JasperFx.Resources;
 using ModularMonolith.Modules.Auth;
 using ModularMonolith.Modules.Core;
-using ModularMonolith.Modules.Notifications;
 using ModularMonolith.Shared.Infrastructure.Authentication;
 using ModularMonolith.Shared.Infrastructure.Http;
 using ModularMonolith.Shared.Infrastructure.Modules;
@@ -18,8 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 IModule[] modules =
 [
     new AuthModule(),
-    new CoreModule(),
-    new NotificationsModule()
+    new CoreModule()
 ];
 
 foreach (var module in modules)

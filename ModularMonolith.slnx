@@ -12,10 +12,6 @@
     <Project Path="src/Modules/Core/ModularMonolith.Modules.Core.Contracts/ModularMonolith.Modules.Core.Contracts.csproj" />
     <Project Path="src/Modules/Core/ModularMonolith.Modules.Core/ModularMonolith.Modules.Core.csproj" />
   </Folder>
-  <Folder Name="/src/Modules/Notifications/">
-    <Project Path="src/Modules/Notifications/ModularMonolith.Modules.Notifications.Contracts/ModularMonolith.Modules.Notifications.Contracts.csproj" />
-    <Project Path="src/Modules/Notifications/ModularMonolith.Modules.Notifications/ModularMonolith.Modules.Notifications.csproj" />
-  </Folder>
   <Folder Name="/src/Shared/">
     <Project Path="src/Shared/ModularMonolith.Shared.Infrastructure/ModularMonolith.Shared.Infrastructure.csproj" />
     <Project Path="src/Shared/ModularMonolith.SharedKernel/ModularMonolith.SharedKernel.csproj" />

@@ -7,9 +7,8 @@ CONFIG      ?= Debug
 ENV_PORT    := $(shell sed -n 's|.*localhost:\([0-9]*\).*|\1|p' .env 2>/dev/null | head -1)
 PORT        ?= $(if $(ENV_PORT),$(ENV_PORT),8080)
 
-PROJECT_Auth          := src/Modules/Auth/ModularMonolith.Modules.Auth
-PROJECT_Core          := src/Modules/Core/ModularMonolith.Modules.Core
-PROJECT_Notifications := src/Modules/Notifications/ModularMonolith.Modules.Notifications
+PROJECT_Auth := src/Modules/Auth/ModularMonolith.Modules.Auth
+PROJECT_Core := src/Modules/Core/ModularMonolith.Modules.Core
 
 MODULE  ?=
 NAME    ?=
@@ -78,11 +77,11 @@ test: ## 🧪  Run tests
 
 migrations-add: ## 🧬  Add a migration (make migrations-add MODULE=Auth NAME=Init [CONTEXT=AuthCatalog DIR=CatalogMigrations])
 	@if [ -z "$(MODULE)" ] || [ -z "$(NAME)" ]; then \
-		printf "$(RED)❌  Usage: make migrations-add MODULE=<Auth|Core|Notifications> NAME=<MigrationName>$(RESET)\n"; \
+		printf "$(RED)❌  Usage: make migrations-add MODULE=<Auth|Core> NAME=<MigrationName>$(RESET)\n"; \
 		exit 1; \
 	fi
 	@if [ -z "$(MODULE_PROJECT)" ]; then \
-		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
+		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth or Core$(RESET)\n"; \
 		exit 1; \
 	fi
 	@printf "$(CYAN)🧬  Adding migration '$(NAME)' to $(MODULE) ($(CONTEXT)DbContext)…$(RESET)\n"
@@ -95,11 +94,11 @@ migrations-add: ## 🧬  Add a migration (make migrations-add MODULE=Auth NAME=I
 
 migrations-remove: ## 🗑️   Remove the last migration (make migrations-remove MODULE=Auth [CONTEXT=AuthCatalog])
 	@if [ -z "$(MODULE)" ]; then \
-		printf "$(RED)❌  Usage: make migrations-remove MODULE=<Auth|Core|Notifications>$(RESET)\n"; \
+		printf "$(RED)❌  Usage: make migrations-remove MODULE=<Auth|Core>$(RESET)\n"; \
 		exit 1; \
 	fi
 	@if [ -z "$(MODULE_PROJECT)" ]; then \
-		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
+		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth or Core$(RESET)\n"; \
 		exit 1; \
 	fi
 	@printf "$(CYAN)🗑️   Removing last migration from $(MODULE) ($(CONTEXT)DbContext)…$(RESET)\n"
@@ -111,11 +110,11 @@ migrations-remove: ## 🗑️   Remove the last migration (make migrations-remov
 
 migrations-script: ## 📜  Generate an idempotent SQL script, generate-only (make migrations-script MODULE=Auth [CONTEXT=AuthCatalog OUT=path.sql])
 	@if [ -z "$(MODULE)" ]; then \
-		printf "$(RED)❌  Usage: make migrations-script MODULE=<Auth|Core|Notifications> [OUT=path.sql]$(RESET)\n"; \
+		printf "$(RED)❌  Usage: make migrations-script MODULE=<Auth|Core> [OUT=path.sql]$(RESET)\n"; \
 		exit 1; \
 	fi
 	@if [ -z "$(MODULE_PROJECT)" ]; then \
-		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
+		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth or Core$(RESET)\n"; \
 		exit 1; \
 	fi
 	@printf "$(CYAN)📜  Generating idempotent SQL script for $(MODULE) ($(CONTEXT)DbContext) → $(OUT)…$(RESET)\n"
