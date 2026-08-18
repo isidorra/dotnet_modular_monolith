@@ -16,4 +16,15 @@
     <Project Path="src/Shared/ModularMonolith.Shared.Infrastructure/ModularMonolith.Shared.Infrastructure.csproj" />
     <Project Path="src/Shared/ModularMonolith.SharedKernel/ModularMonolith.SharedKernel.csproj" />
   </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/Modules/" />
+  <Folder Name="/tests/Modules/Auth/">
+    <Project Path="tests/Modules/Auth/ModularMonolith.Modules.Auth.Tests/ModularMonolith.Modules.Auth.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/Core/">
+    <Project Path="tests/Modules/Core/ModularMonolith.Modules.Core.Tests/ModularMonolith.Modules.Core.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Shared/">
+    <Project Path="tests/Shared/ModularMonolith.Shared.Tests/ModularMonolith.Shared.Tests.csproj" />
+  </Folder>
 </Solution>
