@@ -1,5 +1,6 @@
 using System.Reflection;
 
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,4 +13,8 @@ public interface IModule
     Assembly Assembly => GetType().Assembly;
 
     void AddModule(IServiceCollection services, IConfiguration configuration);
+
+    void MapEndpoints(IEndpointRouteBuilder endpoints)
+    {
+    }
 }

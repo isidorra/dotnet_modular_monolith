@@ -13,7 +13,10 @@ PROJECT_Notifications := src/Modules/Notifications/ModularMonolith.Modules.Notif
 
 MODULE  ?=
 NAME    ?=
-OUT     ?= $(MODULE)-migration.sql
+CONTEXT ?= $(MODULE)
+DIR     ?= Migrations
+SCRIPTS_DIR := scripts
+OUT     ?= $(SCRIPTS_DIR)/$(CONTEXT)-migration.sql
 MODULE_PROJECT = $(PROJECT_$(MODULE))
 
 CYAN   := \033[36m
@@ -73,7 +76,7 @@ test: ## 🧪  Run tests
 		printf "$(GREEN)✅  Tests passed$(RESET)\n"; \
 	fi
 
-migrations-add: ## 🧬  Add an EF Core migration (make migrations-add MODULE=Notifications NAME=InitialCreate)
+migrations-add: ## 🧬  Add a migration (make migrations-add MODULE=Auth NAME=Init [CONTEXT=AuthCatalog DIR=CatalogMigrations])
 	@if [ -z "$(MODULE)" ] || [ -z "$(NAME)" ]; then \
 		printf "$(RED)❌  Usage: make migrations-add MODULE=<Auth|Core|Notifications> NAME=<MigrationName>$(RESET)\n"; \
 		exit 1; \
@@ -82,15 +85,15 @@ migrations-add: ## 🧬  Add an EF Core migration (make migrations-add MODULE=No
 		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
 		exit 1; \
 	fi
-	@printf "$(CYAN)🧬  Adding migration '$(NAME)' to $(MODULE)…$(RESET)\n"
+	@printf "$(CYAN)🧬  Adding migration '$(NAME)' to $(MODULE) ($(CONTEXT)DbContext)…$(RESET)\n"
 	@dotnet ef migrations add $(NAME) \
 		--project $(MODULE_PROJECT) \
 		--startup-project $(API_PROJECT) \
-		--context $(MODULE)DbContext \
-		--output-dir Migrations
+		--context $(CONTEXT)DbContext \
+		--output-dir Persistence/$(DIR)
 	@printf "$(GREEN)✅  Migration '$(NAME)' added to $(MODULE)$(RESET)\n"
 
-migrations-remove: ## 🗑️   Remove the last EF Core migration (make migrations-remove MODULE=Notifications)
+migrations-remove: ## 🗑️   Remove the last migration (make migrations-remove MODULE=Auth [CONTEXT=AuthCatalog])
 	@if [ -z "$(MODULE)" ]; then \
 		printf "$(RED)❌  Usage: make migrations-remove MODULE=<Auth|Core|Notifications>$(RESET)\n"; \
 		exit 1; \
@@ -99,14 +102,14 @@ migrations-remove: ## 🗑️   Remove the last EF Core migration (make migratio
 		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
 		exit 1; \
 	fi
-	@printf "$(CYAN)🗑️   Removing last migration from $(MODULE)…$(RESET)\n"
+	@printf "$(CYAN)🗑️   Removing last migration from $(MODULE) ($(CONTEXT)DbContext)…$(RESET)\n"
 	@dotnet ef migrations remove \
 		--project $(MODULE_PROJECT) \
 		--startup-project $(API_PROJECT) \
-		--context $(MODULE)DbContext
+		--context $(CONTEXT)DbContext
 	@printf "$(GREEN)✅  Last migration removed from $(MODULE)$(RESET)\n"
 
-migrations-script: ## 📜  Generate an idempotent SQL script, generate-only (make migrations-script MODULE=Notifications [OUT=path.sql])
+migrations-script: ## 📜  Generate an idempotent SQL script, generate-only (make migrations-script MODULE=Auth [CONTEXT=AuthCatalog OUT=path.sql])
 	@if [ -z "$(MODULE)" ]; then \
 		printf "$(RED)❌  Usage: make migrations-script MODULE=<Auth|Core|Notifications> [OUT=path.sql]$(RESET)\n"; \
 		exit 1; \
@@ -115,11 +118,12 @@ migrations-script: ## 📜  Generate an idempotent SQL script, generate-only (ma
 		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
 		exit 1; \
 	fi
-	@printf "$(CYAN)📜  Generating idempotent SQL script for $(MODULE) → $(OUT)…$(RESET)\n"
+	@printf "$(CYAN)📜  Generating idempotent SQL script for $(MODULE) ($(CONTEXT)DbContext) → $(OUT)…$(RESET)\n"
+	@mkdir -p $(dir $(OUT))
 	@dotnet ef migrations script --idempotent \
 		--project $(MODULE_PROJECT) \
 		--startup-project $(API_PROJECT) \
-		--context $(MODULE)DbContext \
+		--context $(CONTEXT)DbContext \
 		-o $(OUT)
 	@printf "$(GREEN)✅  Script written to $(OUT)$(RESET)\n"
 

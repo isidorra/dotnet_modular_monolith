@@ -7,23 +7,23 @@ using ModularMonolith.Shared.Infrastructure.Persistence;
 
 namespace ModularMonolith.Modules.Auth.Persistence;
 
-public sealed class AuthDbContextFactory : IDesignTimeDbContextFactory<AuthDbContext>
+public sealed class AuthCatalogDbContextFactory : IDesignTimeDbContextFactory<AuthCatalogDbContext>
 {
-    public AuthDbContext CreateDbContext(string[] args)
+    public AuthCatalogDbContext CreateDbContext(string[] args)
     {
         Env.TraversePath().NoClobber().Load();
 
         var baseConnectionString = Environment.GetEnvironmentVariable("ConnectionStrings__Postgres")
             ?? throw new InvalidOperationException("ConnectionStrings__Postgres is not set");
 
-        var optionsBuilder = new DbContextOptionsBuilder<AuthDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<AuthCatalogDbContext>();
 
         ModuleDbContextServiceCollectionExtensions.UseSearchPath(
             optionsBuilder,
             baseConnectionString,
-            AuthModule.SchemaPrefix,
-            null);
+            AuthCatalogDbContext.Schema,
+            AuthCatalogDbContext.Schema);
 
-        return new AuthDbContext(optionsBuilder.Options);
+        return new AuthCatalogDbContext(optionsBuilder.Options);
     }
 }
