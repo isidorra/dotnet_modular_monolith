@@ -64,9 +64,11 @@ public static class ModuleDbContextServiceCollectionExtensions
         return services;
     }
 
-    public static string BaseConnectionString(IConfiguration configuration) =>
-        configuration.GetConnectionString("Postgres")
+    public static string BaseConnectionString(IConfiguration configuration)
+    {
+        return configuration.GetConnectionString("Postgres")
             ?? throw new InvalidOperationException("ConnectionStrings:Postgres is not configured");
+    }
 
     public static void UseSearchPath(
         DbContextOptionsBuilder options,

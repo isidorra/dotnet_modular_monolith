@@ -33,5 +33,8 @@ public sealed class AuthModule : IModule
         services.AddScoped<IJwtTokenIssuer, JwtTokenIssuer>();
     }
 
-    public void MapEndpoints(IEndpointRouteBuilder endpoints) => AuthEndpoints.Map(endpoints);
+    public void MapEndpoints(IEndpointRouteBuilder endpoints)
+    {
+        AuthEndpoints.Map(endpoints);
+    }
 }

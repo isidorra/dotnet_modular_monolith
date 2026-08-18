@@ -22,8 +22,10 @@ public sealed class TenantMigrationScriptCache
         _scopeFactory = scopeFactory;
     }
 
-    public string ScriptFor(TenantSchemaDescriptor descriptor) =>
-        _scripts.GetOrAdd(descriptor.ContextType, Generate);
+    public string ScriptFor(TenantSchemaDescriptor descriptor)
+    {
+        return _scripts.GetOrAdd(descriptor.ContextType, Generate);
+    }
 
     private string Generate(Type contextType)
     {

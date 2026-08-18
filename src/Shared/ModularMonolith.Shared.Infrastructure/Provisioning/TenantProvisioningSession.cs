@@ -45,12 +45,14 @@ public sealed class TenantProvisioningSession : IAsyncDisposable
         return context;
     }
 
-    public Task SetSearchPathAsync(string schema, CancellationToken cancellationToken = default) =>
-        TenantProvisioner.ExecuteAsync(
+    public Task SetSearchPathAsync(string schema, CancellationToken cancellationToken = default)
+    {
+        return TenantProvisioner.ExecuteAsync(
             _connection,
             _transaction,
             $"SET LOCAL search_path = {TenantSchema.Quote(schema)};",
             cancellationToken);
+    }
 
     public async Task CommitAsync(CancellationToken cancellationToken = default)
     {

@@ -55,11 +55,14 @@ app.UseExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/health", () => Results.Ok(new
+app.MapGet("/health", () =>
 {
-    status = "healthy",
-    modules = modules.Select(m => m.Name)
-})).AllowAnonymous();
+    return Results.Ok(new
+    {
+        status = "healthy",
+        modules = modules.Select(m => m.Name)
+    });
+}).AllowAnonymous();
 
 var api = app.MapGroup("/api/v1");
 

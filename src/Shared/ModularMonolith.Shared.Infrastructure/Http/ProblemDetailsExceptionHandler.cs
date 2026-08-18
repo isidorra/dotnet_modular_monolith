@@ -43,22 +43,25 @@ public sealed class ProblemDetailsExceptionHandler : IExceptionHandler
         });
     }
 
-    private static ProblemDetails Map(Exception exception) => exception switch
+    private static ProblemDetails Map(Exception exception)
     {
-        ValidationException validation => Validation(validation),
-        AuthenticationFailedException => new ProblemDetails
+        return exception switch
         {
-            Status = StatusCodes.Status401Unauthorized,
-            Title = "Invalid credentials"
-        },
-        _ when IsUniqueViolation(exception) => new ProblemDetails
-        {
-            Status = StatusCodes.Status409Conflict,
-            Title = "Conflict",
-            Detail = "A record with the same unique key already exists"
-        },
-        _ => null
-    };
+            ValidationException validation => Validation(validation),
+            AuthenticationFailedException => new ProblemDetails
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Title = "Invalid credentials"
+            },
+            _ when IsUniqueViolation(exception) => new ProblemDetails
+            {
+                Status = StatusCodes.Status409Conflict,
+                Title = "Conflict",
+                Detail = "A record with the same unique key already exists"
+            },
+            _ => null
+        };
+    }
 
     private static ProblemDetails Validation(ValidationException exception)
     {

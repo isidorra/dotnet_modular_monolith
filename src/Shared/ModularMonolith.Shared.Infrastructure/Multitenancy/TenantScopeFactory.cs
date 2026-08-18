@@ -44,6 +44,9 @@ public sealed class TenantScopeFactory : ITenantScopeFactory
 
         public IServiceProvider Services => _scope.ServiceProvider;
 
-        public ValueTask DisposeAsync() => _scope.DisposeAsync();
+        public ValueTask DisposeAsync()
+        {
+            return _scope.DisposeAsync();
+        }
     }
 }
