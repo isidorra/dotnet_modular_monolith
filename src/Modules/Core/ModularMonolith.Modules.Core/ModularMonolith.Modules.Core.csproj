@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../ModularMonolith.Modules.Core.Contracts/ModularMonolith.Modules.Core.Contracts.csproj" />
+    <ProjectReference Include="../../../Shared/ModularMonolith.Shared.Infrastructure/ModularMonolith.Shared.Infrastructure.csproj" />
+
+    <ProjectReference Include="../../Auth/ModularMonolith.Modules.Auth.Contracts/ModularMonolith.Modules.Auth.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
