@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using ModularMonolith.Modules.Core.Persistence;
 using ModularMonolith.Modules.Core.Provisioning;
@@ -19,6 +21,12 @@ public sealed class CoreModule : IModule
     {
         services.AddModuleDbContext<CoreDbContext>(configuration, SchemaPrefix);
 
+        services.TryAddSingleton(TimeProvider.System);
         services.AddScoped<ITenantProvisioningParticipant, EmployeeProvisioningParticipant>();
+    }
+
+    public void MapEndpoints(IEndpointRouteBuilder endpoints)
+    {
+        CoreEndpoints.Map(endpoints);
     }
 }

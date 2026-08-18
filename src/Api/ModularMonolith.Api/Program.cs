@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using DotNetEnv;
 using JasperFx.Resources;
 using ModularMonolith.Modules.Auth;
@@ -26,6 +28,10 @@ foreach (var module in modules)
 }
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();
 
