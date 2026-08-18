@@ -1,12 +1,15 @@
 using System.Text.Json.Serialization;
 
 using DotNetEnv;
+
 using JasperFx.Resources;
+
 using ModularMonolith.Modules.Auth;
 using ModularMonolith.Modules.Core;
 using ModularMonolith.Shared.Infrastructure.Authentication;
 using ModularMonolith.Shared.Infrastructure.Http;
 using ModularMonolith.Shared.Infrastructure.Modules;
+
 using Wolverine;
 using Wolverine.EntityFrameworkCore;
 using Wolverine.FluentValidation;
