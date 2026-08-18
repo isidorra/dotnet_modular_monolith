@@ -10,16 +10,9 @@ using Npgsql;
 
 namespace ModularMonolith.Shared.Infrastructure.Http;
 
-public sealed class ProblemDetailsExceptionHandler : IExceptionHandler
+public sealed class ProblemDetailsExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
 {
     private const string UniqueViolation = "23505";
-
-    private readonly IProblemDetailsService _problemDetailsService;
-
-    public ProblemDetailsExceptionHandler(IProblemDetailsService problemDetailsService)
-    {
-        _problemDetailsService = problemDetailsService;
-    }
 
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
@@ -35,7 +28,7 @@ public sealed class ProblemDetailsExceptionHandler : IExceptionHandler
 
         httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
 
-        return await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext
+        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
             HttpContext = httpContext,
             Exception = exception,

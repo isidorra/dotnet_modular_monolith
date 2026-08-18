@@ -9,20 +9,13 @@ using ModularMonolith.Shared.Infrastructure.Multitenancy;
 
 namespace ModularMonolith.Modules.Auth.Authentication;
 
-public sealed class JwtTokenIssuer : IJwtTokenIssuer
+public sealed class JwtTokenIssuer(IOptions<JwtOptions> options, TimeProvider timeProvider) : IJwtTokenIssuer
 {
-    private readonly JwtOptions _options;
-    private readonly TimeProvider _timeProvider;
-
-    public JwtTokenIssuer(IOptions<JwtOptions> options, TimeProvider timeProvider)
-    {
-        _options = options.Value;
-        _timeProvider = timeProvider;
-    }
+    private readonly JwtOptions _options = options.Value;
 
     public string Issue(Guid userId, Guid tenantId, string email)
     {
-        var now = _timeProvider.GetUtcNow().UtcDateTime;
+        var now = timeProvider.GetUtcNow().UtcDateTime;
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey));
 
         var descriptor = new SecurityTokenDescriptor

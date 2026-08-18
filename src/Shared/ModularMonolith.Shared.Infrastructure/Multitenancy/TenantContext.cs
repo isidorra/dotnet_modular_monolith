@@ -2,27 +2,18 @@ using Microsoft.AspNetCore.Http;
 
 namespace ModularMonolith.Shared.Infrastructure.Multitenancy;
 
-public sealed class TenantContext : ITenantContext
+public sealed class TenantContext(TenantScopeState scopeState, IHttpContextAccessor httpContextAccessor) : ITenantContext
 {
-    private readonly TenantScopeState _scopeState;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public TenantContext(TenantScopeState scopeState, IHttpContextAccessor httpContextAccessor)
-    {
-        _scopeState = scopeState;
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     public Guid TenantId
     {
         get
         {
-            if (_scopeState.TenantId is { } scopedTenantId)
+            if (scopeState.TenantId is { } scopedTenantId)
             {
                 return scopedTenantId;
             }
 
-            var claim = _httpContextAccessor.HttpContext?.User?.FindFirst(TenantClaimTypes.TenantId)?.Value;
+            var claim = httpContextAccessor.HttpContext?.User?.FindFirst(TenantClaimTypes.TenantId)?.Value;
 
             if (claim is null)
             {

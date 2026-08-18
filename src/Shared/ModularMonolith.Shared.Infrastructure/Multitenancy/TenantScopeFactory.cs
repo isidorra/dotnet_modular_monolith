@@ -4,18 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ModularMonolith.Shared.Infrastructure.Multitenancy;
 
-public sealed class TenantScopeFactory : ITenantScopeFactory
+public sealed class TenantScopeFactory(IServiceScopeFactory scopeFactory) : ITenantScopeFactory
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-
-    public TenantScopeFactory(IServiceScopeFactory scopeFactory)
-    {
-        _scopeFactory = scopeFactory;
-    }
-
     public ITenantScope CreateScope(Guid tenantId, DbConnection connection = null, DbTransaction transaction = null)
     {
-        var scope = _scopeFactory.CreateAsyncScope();
+        var scope = scopeFactory.CreateAsyncScope();
 
         try
         {
@@ -30,23 +23,15 @@ public sealed class TenantScopeFactory : ITenantScopeFactory
         }
     }
 
-    private sealed class TenantScope : ITenantScope
+    private sealed class TenantScope(Guid tenantId, AsyncServiceScope scope) : ITenantScope
     {
-        private readonly AsyncServiceScope _scope;
+        public Guid TenantId { get; } = tenantId;
 
-        public TenantScope(Guid tenantId, AsyncServiceScope scope)
-        {
-            TenantId = tenantId;
-            _scope = scope;
-        }
-
-        public Guid TenantId { get; }
-
-        public IServiceProvider Services => _scope.ServiceProvider;
+        public IServiceProvider Services => scope.ServiceProvider;
 
         public ValueTask DisposeAsync()
         {
-            return _scope.DisposeAsync();
+            return scope.DisposeAsync();
         }
     }
 }

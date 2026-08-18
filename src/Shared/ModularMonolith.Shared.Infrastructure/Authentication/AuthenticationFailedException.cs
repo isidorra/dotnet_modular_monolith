@@ -1,8 +1,3 @@
 namespace ModularMonolith.Shared.Infrastructure.Authentication;
 
-public sealed class AuthenticationFailedException : Exception
-{
-    public AuthenticationFailedException() : base("Invalid credentials")
-    {
-    }
-}
+public sealed class AuthenticationFailedException() : Exception("Invalid credentials");

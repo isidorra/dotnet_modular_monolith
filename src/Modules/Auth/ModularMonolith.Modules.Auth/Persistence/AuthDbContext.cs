@@ -6,12 +6,8 @@ using ModularMonolith.Shared.Infrastructure.Persistence;
 
 namespace ModularMonolith.Modules.Auth.Persistence;
 
-public sealed class AuthDbContext : IdentityUserContext<AppUser, Guid>
+public sealed class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityUserContext<AppUser, Guid>(options)
 {
-    public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

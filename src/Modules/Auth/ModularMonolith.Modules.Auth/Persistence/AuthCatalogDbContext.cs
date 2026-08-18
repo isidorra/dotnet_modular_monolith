@@ -6,13 +6,9 @@ using ModularMonolith.Shared.Infrastructure.Persistence;
 
 namespace ModularMonolith.Modules.Auth.Persistence;
 
-public sealed class AuthCatalogDbContext : DbContext
+public sealed class AuthCatalogDbContext(DbContextOptions<AuthCatalogDbContext> options) : DbContext(options)
 {
     public const string Schema = "auth_catalog";
-
-    public AuthCatalogDbContext(DbContextOptions<AuthCatalogDbContext> options) : base(options)
-    {
-    }
 
     public DbSet<Tenant> Tenants => Set<Tenant>();
 
