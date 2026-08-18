@@ -27,7 +27,7 @@ BOLD   := \033[1m
 RESET  := \033[0m
 
 .DEFAULT_GOAL := help
-.PHONY: help setup restore build rebuild run watch clean format test health env info outdated migrations-add migrations-remove migrations-script
+.PHONY: help setup restore build rebuild run watch clean format test env info outdated migrations-add migrations-remove migrations-script
 
 help: ## 📖  Show this help
 	@printf "\n  $(BOLD)$(CYAN)ModularMonolith$(RESET) $(DIM)· .NET 10 modular monolith$(RESET)\n\n"
@@ -135,15 +135,6 @@ clean: ## 🧹  Remove build output
 	@printf "$(YELLOW)🧹  Cleaning bin/ and obj/…$(RESET)\n"
 	@find . -type d \( -name bin -o -name obj \) -prune -exec rm -rf {} + 2>/dev/null || true
 	@printf "$(GREEN)✅  Clean$(RESET)\n"
-
-health: ## 🩺  Ping the running API
-	@printf "$(CYAN)🩺  GET http://localhost:$(PORT)/health$(RESET)\n"
-	@if curl -sf http://localhost:$(PORT)/health; then \
-		printf "\n$(GREEN)✅  Healthy$(RESET)\n"; \
-	else \
-		printf "$(RED)❌  No response — is it running? Try 'make run'$(RESET)\n"; \
-		exit 1; \
-	fi
 
 info: ## ℹ️   Show SDK version and projects
 	@printf "$(CYAN)ℹ️   SDK$(RESET)      $$(dotnet --version)\n"

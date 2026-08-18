@@ -62,15 +62,6 @@ app.UseExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/health", () =>
-{
-    return Results.Ok(new
-    {
-        status = "healthy",
-        modules = modules.Select(m => m.Name)
-    });
-}).AllowAnonymous();
-
 var api = app.MapGroup("/api/v1");
 
 foreach (var module in modules)

@@ -23,5 +23,6 @@ jobs:
           dotnet-version: "10.0.x"
 
       - run: dotnet restore ModularMonolith.slnx
+      - run: dotnet format ModularMonolith.slnx --verify-no-changes --no-restore
       - run: dotnet build ModularMonolith.slnx --no-restore --configuration Release
       - run: dotnet test ModularMonolith.slnx --no-build --configuration Release
