@@ -1,11 +1,21 @@
 <Project>
-
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageVersion Include="DotNetEnv" Version="3.2.0" />
+    <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageVersion>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.11" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageVersion Include="WolverineFx" Version="6.29.0" />
+    <PackageVersion Include="WolverineFx.EntityFrameworkCore" Version="6.29.0" />
+    <PackageVersion Include="WolverineFx.FluentValidation" Version="6.29.0" />
+    <PackageVersion Include="WolverineFx.Postgresql" Version="6.29.0" />
+    <PackageVersion Include="WolverineFx.RuntimeCompilation" Version="6.29.0" />
   </ItemGroup>
-
 </Project>

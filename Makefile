@@ -7,6 +7,15 @@ CONFIG      ?= Debug
 ENV_PORT    := $(shell sed -n 's|.*localhost:\([0-9]*\).*|\1|p' .env 2>/dev/null | head -1)
 PORT        ?= $(if $(ENV_PORT),$(ENV_PORT),8080)
 
+PROJECT_Auth          := src/Modules/Auth/ModularMonolith.Modules.Auth
+PROJECT_Core          := src/Modules/Core/ModularMonolith.Modules.Core
+PROJECT_Notifications := src/Modules/Notifications/ModularMonolith.Modules.Notifications
+
+MODULE  ?=
+NAME    ?=
+OUT     ?= $(MODULE)-migration.sql
+MODULE_PROJECT = $(PROJECT_$(MODULE))
+
 CYAN   := \033[36m
 GREEN  := \033[32m
 YELLOW := \033[33m
@@ -16,7 +25,7 @@ BOLD   := \033[1m
 RESET  := \033[0m
 
 .DEFAULT_GOAL := help
-.PHONY: help setup restore build rebuild run watch clean format test health env info outdated
+.PHONY: help setup restore build rebuild run watch clean format test health env info outdated migrations-add migrations-remove migrations-script
 
 help: ## 📖  Show this help
 	@printf "\n  $(BOLD)$(CYAN)ModularMonolith$(RESET) $(DIM)· .NET 10 modular monolith$(RESET)\n\n"
@@ -34,9 +43,10 @@ env: ## 🔐  Create .env from .env.example
 		printf "$(GREEN)✅  Created .env from .env.example$(RESET)\n"; \
 	fi
 
-restore: ## 📦  Restore NuGet packages
+restore: ## 📦  Restore NuGet packages + local tools
 	@printf "$(CYAN)📦  Restoring packages…$(RESET)\n"
 	@dotnet restore $(SOLUTION)
+	@dotnet tool restore
 	@printf "$(GREEN)✅  Restore complete$(RESET)\n"
 
 build: ## 🔨  Build the solution
@@ -62,6 +72,56 @@ test: ## 🧪  Run tests
 		dotnet test $(SOLUTION) -c $(CONFIG) --nologo; \
 		printf "$(GREEN)✅  Tests passed$(RESET)\n"; \
 	fi
+
+migrations-add: ## 🧬  Add an EF Core migration (make migrations-add MODULE=Notifications NAME=InitialCreate)
+	@if [ -z "$(MODULE)" ] || [ -z "$(NAME)" ]; then \
+		printf "$(RED)❌  Usage: make migrations-add MODULE=<Auth|Core|Notifications> NAME=<MigrationName>$(RESET)\n"; \
+		exit 1; \
+	fi
+	@if [ -z "$(MODULE_PROJECT)" ]; then \
+		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
+		exit 1; \
+	fi
+	@printf "$(CYAN)🧬  Adding migration '$(NAME)' to $(MODULE)…$(RESET)\n"
+	@dotnet ef migrations add $(NAME) \
+		--project $(MODULE_PROJECT) \
+		--startup-project $(API_PROJECT) \
+		--context $(MODULE)DbContext \
+		--output-dir Migrations
+	@printf "$(GREEN)✅  Migration '$(NAME)' added to $(MODULE)$(RESET)\n"
+
+migrations-remove: ## 🗑️   Remove the last EF Core migration (make migrations-remove MODULE=Notifications)
+	@if [ -z "$(MODULE)" ]; then \
+		printf "$(RED)❌  Usage: make migrations-remove MODULE=<Auth|Core|Notifications>$(RESET)\n"; \
+		exit 1; \
+	fi
+	@if [ -z "$(MODULE_PROJECT)" ]; then \
+		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
+		exit 1; \
+	fi
+	@printf "$(CYAN)🗑️   Removing last migration from $(MODULE)…$(RESET)\n"
+	@dotnet ef migrations remove \
+		--project $(MODULE_PROJECT) \
+		--startup-project $(API_PROJECT) \
+		--context $(MODULE)DbContext
+	@printf "$(GREEN)✅  Last migration removed from $(MODULE)$(RESET)\n"
+
+migrations-script: ## 📜  Generate an idempotent SQL script, generate-only (make migrations-script MODULE=Notifications [OUT=path.sql])
+	@if [ -z "$(MODULE)" ]; then \
+		printf "$(RED)❌  Usage: make migrations-script MODULE=<Auth|Core|Notifications> [OUT=path.sql]$(RESET)\n"; \
+		exit 1; \
+	fi
+	@if [ -z "$(MODULE_PROJECT)" ]; then \
+		printf "$(RED)❌  Unknown MODULE '$(MODULE)' — expected Auth, Core or Notifications$(RESET)\n"; \
+		exit 1; \
+	fi
+	@printf "$(CYAN)📜  Generating idempotent SQL script for $(MODULE) → $(OUT)…$(RESET)\n"
+	@dotnet ef migrations script --idempotent \
+		--project $(MODULE_PROJECT) \
+		--startup-project $(API_PROJECT) \
+		--context $(MODULE)DbContext \
+		-o $(OUT)
+	@printf "$(GREEN)✅  Script written to $(OUT)$(RESET)\n"
 
 format: ## 🎨  Format code in place
 	@printf "$(CYAN)🎨  Formatting…$(RESET)\n"
